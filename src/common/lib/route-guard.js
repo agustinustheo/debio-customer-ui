@@ -3,7 +3,8 @@ import store from "@/store/index"
 
 async function dispatchGetAccount(wallet, address, func){
   if (wallet == null) {
-    if (address != "") {
+    const extensionAccount = localStorage.getLocalStorageByName("ext_account_data")
+    if (address != "" && !extensionAccount) {
       await store.dispatch("substrate/getAllAccounts", {
         address: address
       })
@@ -20,8 +21,13 @@ export async function checkIsLoggedIn(to, from, next) {
   }
 
   let wallet = store.getters["substrate/wallet"]
-  const keystore = localStorage.getAddress()
-  const isLoggedIn = !!keystore
+  const extensionAccount = localStorage.getLocalStorageByName("ext_account_data")
+  if (extensionAccount) {
+    await store.dispatch("substrate/setExtensionAccountData", {
+      address: extensionAccount
+    })
+  }
+  const isLoggedIn = !!address || !!extensionAccount
 
   if (to.path == "/sign-in" || to.path == "/generate") {
     if (isLoggedIn) {

@@ -7,6 +7,7 @@ import localStorage from "@/common/lib/local-storage"
 import masterConfigEvent from "./event-types.json"
 import { ApiPromise, WsProvider } from "@polkadot/api"
 import { processEvent } from "@/common/lib/polkadot-provider/events"
+import { web3Accounts, web3Enable } from "@polkadot/extension-dapp"
 
 const {
   cryptoWaitReady
@@ -33,6 +34,7 @@ const defaultState = {
   lastEventData: null,
   localListNotification: [],
   configEvent: null,
+  extensionAccountData: null,
   mnemonicData: null
 }
 
@@ -99,6 +101,9 @@ export default {
     },
     SET_MNEMONIC_DATA(state, event) {
       state.mnemonicData = event
+    },
+    SET_EXT_ACCOUNT_DATA(state, event) {
+      state.extensionAccountData = event
     }
   },
   actions: {
@@ -177,6 +182,53 @@ export default {
 
         localStorage.setLocalStorageByName("mnemonic_data", CryptoJS.AES.encrypt(mnemonic, password));
         commit("SET_MNEMONIC_DATA", mnemonic)
+        return { success: true }
+      } catch (err) {
+        console.error(err)
+        commit("CLEAR_WALLET")
+        commit("SET_LOADING_WALLET", false)
+        return { success: false, error: err.message }
+      }
+    },
+    async registerAccount({ commit }, { account }) {
+      try {
+        const address = account.address;
+        commit("SET_LOADING_WALLET", true)
+        commit("CLEAR_WALLET")
+
+        localStorage.setAddress(address)
+        commit("SET_WALLET", account) // FIXME: simpen untuk dev
+        commit("SET_WALLET_PUBLIC_KEY", u8aToHex(address))
+        commit("SET_LOADING_WALLET", false)
+
+        localStorage.setLocalStorageByName("ext_account_data", address)
+        commit("SET_EXT_ACCOUNT_DATA", account)
+        return { success: true }
+      } catch (err) {
+        console.error(err)
+        commit("CLEAR_WALLET")
+        commit("SET_LOADING_WALLET", false)
+        return { success: false, error: err.message }
+      }
+    },
+    async setExtensionAccountData({ commit }, { address }) {
+      try {
+        commit("SET_LOADING_WALLET", true)
+        commit("CLEAR_WALLET")
+
+        localStorage.setAddress(address)
+        commit("SET_WALLET_PUBLIC_KEY", u8aToHex(address))
+        commit("SET_LOADING_WALLET", false)
+
+        localStorage.setLocalStorageByName("ext_account_data", address)
+        await web3Enable("DeBio Network")
+        const accounts = await web3Accounts()
+        accounts.forEach(account => {
+          if (account.address === address) {
+            commit("SET_EXT_ACCOUNT_DATA", account)
+            commit("SET_WALLET", account) // FIXME: simpen untuk dev
+          }
+        })
         return { success: true }
       } catch (err) {
         console.error(err)
@@ -404,6 +456,9 @@ export default {
     },
     getMnemonicData(state) {
       return state.mnemonicData
+    },
+    getExtensionAccountData(state) {
+      return state.extensionAccountData
     }
   }
 }

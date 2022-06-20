@@ -513,7 +513,7 @@ export default {
     async calculateTxWeight() {
       this.txWeight = "Calculating..."
 
-      const txWeight = await registerElectronicMedicalRecordFee(this.api, this.wallet, this.emr)
+      const txWeight = await registerElectronicMedicalRecordFee(this.api, this.wallet.address, this.emr)
       this.txWeight = `${Number(this.web3.utils.fromWei(String(txWeight.partialFee), "ether")).toFixed(4)} DBIO`
     },
 

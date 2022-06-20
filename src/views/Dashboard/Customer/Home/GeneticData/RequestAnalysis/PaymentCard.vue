@@ -248,7 +248,7 @@ export default {
     },
 
     async getCancelOrderFee() {
-      const txWeight = await cancelGeneticAnalysisOrderFee(this.api, this.wallet, this.orderId)
+      const txWeight = await cancelGeneticAnalysisOrderFee(this.api, this.wallet.address, this.orderId)
     
       this.txWeight = this.web3.utils.fromWei(String(txWeight.partialFee), "ether")
       this.showCancelDialog = true

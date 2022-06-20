@@ -114,7 +114,7 @@ export default {
       const customerBoxPublicKey = await this.getCustomerPublicKey()
       const txWeight = await getCreateOrderFee(
         this.api, 
-        this.pair, 
+        this.pair.address, 
         this.selectedService.serviceId,
         this.selectedService.indexPrice,
         customerBoxPublicKey,

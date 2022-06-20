@@ -426,12 +426,12 @@ export default {
       let txWeight
       this.txWeight = "Calculating..."
       if (!this.isEdit) {
-        txWeight = await updateGeneticDataFee(this.api, this.wallet, this.dataId, this.document.title, this.document.description)
+        txWeight = await updateGeneticDataFee(this.api, this.wallet.address, this.dataId, this.document.title, this.document.description)
         this.txWeight = this.formatTxWeight(txWeight.partialFee)
         return
       }
 
-      txWeight = await addGeneticDataFee(this.api, this.wallet, this.document.title, this.document.description)
+      txWeight = await addGeneticDataFee(this.api, this.wallet.address, this.document.title, this.document.description)
       this.txWeight = this.formatTxWeight(txWeight.partialFee)
        
     },

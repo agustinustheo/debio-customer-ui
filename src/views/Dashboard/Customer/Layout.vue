@@ -233,6 +233,7 @@ export default {
       wallet: (state) => state.substrate.wallet,
       localListNotification: (state) => state.substrate.localListNotification,
       mnemonicData: (state) => state.substrate.mnemonicData,
+      extensionAccountData: (state) => state.substrate.extensionAccountData,
       api: (state) => state.api
     }),
 
@@ -274,7 +275,7 @@ export default {
   },
 
   async mounted() {
-    if (!this.mnemonicData) this.showModalPassword = true
+    if (!this.mnemonicData && !localStorage.doesLocalStorageByNameExist("ext_account_data")) this.showModalPassword = true
     await this.getListNotification()
     await this.checkMetamask()
   },

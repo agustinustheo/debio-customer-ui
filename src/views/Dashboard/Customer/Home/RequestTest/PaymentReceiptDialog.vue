@@ -194,7 +194,7 @@ export default {
       this.txWeight = "Calculating..."
       const txWeight = await createOrderFee(
         this.api,
-        this.wallet,
+        this.wallet.address,
         this.selectedService.serviceId,
         this.selectedService.indexPrice,
         this.customerBoxPublicKey,

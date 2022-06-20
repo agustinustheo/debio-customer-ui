@@ -301,7 +301,7 @@ export default {
       this.selectedFile = item
       this.showModal = true
 
-      const txWeight = await deregisterElectronicMedicalRecordFee(this.api, this.wallet, item.id)
+      const txWeight = await deregisterElectronicMedicalRecordFee(this.api, this.wallet.address, item.id)
       this.txWeight = `${Number(this.web3.utils.fromWei(String(txWeight.partialFee), "ether")).toFixed(4)} DBIO`
     },
 

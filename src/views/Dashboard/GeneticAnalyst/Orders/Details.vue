@@ -468,7 +468,7 @@ export default {
         if (this.orderDataDetails?.analysis_info?.status === "InProgress") {
           const txWeight = await submitGeneticAnalysisFee(
             this.api,
-            this.wallet,
+            this.wallet.address,
             this.orderDataDetails.geneticAnalysisTrackingId,
             this.document.recordLink,
             this.document.description
@@ -557,7 +557,7 @@ export default {
     },
 
     async calculateRejectFee() {
-      const txWeight = await rejectGeneticAnalysisFee(this.api, this.wallet, this.orderDataDetails.geneticAnalysisTrackingId, this.rejectionTitle, this.rejectionDesc)
+      const txWeight = await rejectGeneticAnalysisFee(this.api, this.wallet.address, this.orderDataDetails.geneticAnalysisTrackingId, this.rejectionTitle, this.rejectionDesc)
       this.txWeight = "Calculating..."
       this.txWeight = `${Number(this.web3.utils.fromWei(String(txWeight.partialFee), "ether")).toFixed(4)} DBIO`
     },
@@ -565,7 +565,7 @@ export default {
     async calculateDocumentFee() {
       const txWeight = await submitGeneticAnalysisFee(
         this.api,
-        this.wallet,
+        this.wallet.address,
         this.orderDataDetails.geneticAnalysisTrackingId,
         this.document.recordLink,
         this.document.description

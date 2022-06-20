@@ -52,6 +52,9 @@ const localStorage = {
   getLocalStorageByName(name) {
     return window.localStorage.getItem(name)
   },
+  doesLocalStorageByNameExist(name) {
+    return window.localStorage.getItem(name) != null
+  },
   removeLocalStorageByName(name) {
     window.localStorage.removeItem(name)
   }

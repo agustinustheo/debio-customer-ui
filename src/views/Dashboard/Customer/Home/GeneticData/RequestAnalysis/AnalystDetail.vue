@@ -202,7 +202,7 @@ export default {
     async getTxWeight(){
       const txWeight = await createGeneticAnalysisOrderFee(
         this.api,
-        this.wallet,
+        this.wallet.address,
         this.selectedGeneticData.id,
         this.service.serviceId,
         0,
